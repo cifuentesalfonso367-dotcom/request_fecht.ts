@@ -1,44 +1,14 @@
-//fetch
+import { ApiService } from "./services/apiServices.js";
+import { data } from "./models/Data.js";
 
-interface ApiResponse<T> {
-    data:T | null;  //esto es el cuerpo del body en caso tal de que salga bien
-    error:string | null; //error en caso tal de que salga mal
-    status:number;  //codigo http [200, 400, 401, 500]
+const characterService = new ApiService<data>("https://rickandmortyapi.com/api/character");
+
+async function ejecutarApp() {
+  const personaje = await characterService.getOne(1);
+  const listaPersonajes = await characterService.getAll();
+
+  console.log(personaje);
+  console.log(listaPersonajes);
 }
 
-async function apiRequest<T>(url:string): Promise<ApiResponse<T>>{
-    try {
-        const res = await fetch(url);
-
-        if (!res.ok) {
-            return {
-                data:null,
-                error: `Error a la hora de hacer la peticion: ${res.statusText}`,
-                status: res.status
-            }
-        }
-
-        const body: unknown = await res.json();
-
-        if (body === null || body === undefined) {
-            return{
-                data:null,
-                error: "Error en la petición",
-                status: res.status
-            };
-        }
-
-        return {
-            data:body as T,
-            error:null,
-            status:res.status
-        }
-    } catch (error) {
-        //se nos cayo el internet
-        return{
-            data:null,
-            error:"fallo la conexion total, compre internet",
-            status: 500
-        };
-    }
-}
+ejecutarApp();

@@ -1,23 +1,38 @@
-# Ejercicio: The Universal Data Fetcher
+# Request Fetch TS
 
-> **Objetivo:** Construir un sistema genérico en TypeScript para consumir cualquier API REST de forma reutilizable y segura.
+A simple TypeScript library for fetching data from REST APIs.
 
----
+## Installation
 
-## Contexto
+```bash
+npm install
+```
 
-Vas a consumir una API pública. Puedes elegir una de estas:
+## Usage
 
-- **JSONPlaceholder** → `https://jsonplaceholder.typicode.com`
-- **Rick & Morty API** → `https://rickandmortyapi.com/api`
+```typescript
+import { ApiService } from './src/services/apiServices.js';
+import { Character } from './src/models/character.js';
 
----
+// Create a service instance
+const characterService = new ApiService<Character>('https://rickandmortyapi.com/api/character');
 
-## Parte 1 — La Interfaz `ApiResponse<T>`
+// Get a single item
+const singleResponse = await characterService.getOne(1);
+console.log(singleResponse);
 
-Crea una interfaz genérica que represente **cualquier respuesta** que pueda devolver tu sistema.
+// Get all items
+const listResponse = await characterService.getAll();
+console.log(listResponse);
+```
 
-**Debe contener:**
+## Running the Example
+
+```bash
+npm run dev
+```
+
+This will run the example in `src/index.ts` which fetches data from the Rick and Morty API.
 - El dato que esperas recibir (puede no existir)
 - El código de estado HTTP
 - Un posible mensaje de error
